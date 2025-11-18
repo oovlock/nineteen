@@ -124,6 +124,60 @@
             }
         }
 
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes particleSwirl {
+            0% {
+                transform: rotate(0deg) translateX(50px) rotate(-0deg) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) translateX(50px) rotate(-360deg) translateY(-100vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes particleBounce {
+            0% {
+                transform: translateY(0) scaleY(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50vh) scaleY(1);
+            }
+            100% {
+                transform: translateY(-100vh) scaleY(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.9;
+            }
+        }
+
         /* ========== SCREEN CONTAINERS ========== */
         .screen {
             position: absolute;
@@ -144,9 +198,11 @@
 
         /* ========== LANDING SCREEN ========== */
         #landingScreen {
-            background: linear-gradient(135deg, #fff5f0 0%, #ffe0d6 100%);
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe4d6 25%, #ffd4e5 50%, #ffcce0 75%, #ffe0d6 100%);
             flex-direction: column;
             gap: 30px;
+            position: relative;
+            overflow: hidden;
         }
 
         .landing-content {
@@ -449,6 +505,49 @@
             animation: floatParticle 3s ease-in forwards;
         }
 
+        .animated-particle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .particle-float {
+            animation: particleFloat 4s ease-in forwards;
+        }
+
+        .particle-swirl {
+            animation: particleSwirl 5s ease-in forwards;
+        }
+
+        .particle-bounce {
+            animation: particleBounce 4s ease-out forwards;
+        }
+
+        .particle-shimmer {
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        .particle-small {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 182, 193, 0.8);
+            box-shadow: 0 0 10px rgba(255, 182, 193, 0.6);
+        }
+
+        .particle-medium {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 105, 180, 0.6);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+        }
+
+        .particle-large {
+            width: 14px;
+            height: 14px;
+            background: rgba(255, 192, 203, 0.5);
+            box-shadow: 0 0 20px rgba(255, 192, 203, 0.4);
+        }
+
         /* ========== MOBILE RESPONSIVE ========== */
         @media (max-width: 768px) {
             .greeting-text {
@@ -540,7 +639,7 @@
     <div id="landingScreen" class="screen active">
         <div class="particles-container" id="landingParticles"></div>
         <div class="landing-content">
-            <div class="greeting-text">Hi Nisa…</div>
+            <div class="greeting-text">Hello my baby 💕</div>
             <div class="subtitle">Before we start, enter the most important number in your life.</div>
             <div class="input-container">
                 <input type="number" class="number-input" id="numberInput" placeholder="">
@@ -619,7 +718,9 @@
         // ========== LANDING SCREEN LOGIC ==========
         function initLandingParticles() {
             const container = document.getElementById('landingParticles');
-            for (let i = 0; i < 20; i++) {
+            
+            // Static sparkles (background)
+            for (let i = 0; i < 15; i++) {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'sparkle';
                 sparkle.style.left = Math.random() * 100 + '%';
@@ -628,6 +729,75 @@
                 sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
                 container.appendChild(sparkle);
             }
+            
+            // Animated particles - floating
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'animated-particle particle-float';
+                    
+                    const sizes = ['particle-small', 'particle-medium'];
+                    particle.classList.add(sizes[Math.floor(Math.random() * sizes.length)]);
+                    
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.bottom = '-20px';
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 6000);
+                }, i * 300);
+            }
+            
+            // Animated particles - swirl
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'animated-particle particle-swirl particle-shimmer';
+                    particle.classList.add('particle-medium');
+                    
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 50 + 50 + '%';
+                    particle.style.animationDelay = Math.random() * 1 + 's';
+                    particle.style.animationDuration = (4 + Math.random() * 2) + 's';
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 7000);
+                }, i * 400);
+            }
+            
+            // Animated particles - bounce
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'animated-particle particle-bounce';
+                    particle.classList.add('particle-large');
+                    
+                    particle.style.left = (10 + Math.random() * 80) + '%';
+                    particle.style.bottom = '-30px';
+                    particle.style.animationDelay = Math.random() * 1.5 + 's';
+                    particle.style.animationDuration = (4 + Math.random() * 1) + 's';
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 6000);
+                }, i * 500);
+            }
+            
+            // Continuous particle generation
+            setInterval(() => {
+                if (document.getElementById('landingScreen').classList.contains('active')) {
+                    const particle = document.createElement('div');
+                    particle.className = 'animated-particle particle-float';
+                    particle.classList.add('particle-small');
+                    
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.bottom = '-20px';
+                    particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 6000);
+                }
+            }, 800);
         }
 
         submitBtn.addEventListener('click', handleNumberSubmit);
