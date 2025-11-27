@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Moment for Nisa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========== RESET & GLOBALS ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe0d6 100%);
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
+            }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes particleSwirl {
+            0% {
+                transform: rotate(0deg) translateX(50px) rotate(-0deg) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) translateX(50px) rotate(-360deg) translateY(-100vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes particleBounce {
+            0% {
+                transform: translateY(0) scaleY(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50vh) scaleY(1);
+            }
+            100% {
+                transform: translateY(-100vh) scaleY(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.9;
+            }
+        }
+
+        /* ========== SCREEN CONTAINERS ========== */
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* ========== LANDING SCREEN ========== */
+        #landingScreen {
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe4d6 25%, #ffd4e5 50%, #ffcce0 75%, #ffe0d6 100%);
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .landing-content {
+            text-align: center;
+            animation: slideUp 1s ease-out;
+        }
+
+        .greeting-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: #d4667e;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #8b6f7f;
+            font-weight: 400;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .number-input {
+            width: 280px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            border: 2px solid rgba(212, 102, 126, 0.3);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            color: #4a4a4a;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .number-input:focus {
+            outline: none;
+            border-color: #d4667e;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(212, 102, 126, 0.2);
+        }
+
+        .number-input.shake {
+            animation: shake 0.5s;
+        }
+
+        .error-message {
+            font-size: 0.9rem;
+            color: #d4667e;
+            min-height: 24px;
+            font-weight: 500;
+        }
+
+        .submit-btn {
+            padding: 14px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #ffb3b8 0%, #ffb8c1 100%);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(212, 102, 126, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 102, 126, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ========== STORY SCREEN ========== */
+        #storyScreen {
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe0d6 100%);
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(212, 102, 126, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .story-text {
+            font-size: 1.8rem;
+            color: #4a4a4a;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .story-text .script-word {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: #d4667e;
+            font-weight: normal;
+        }
+
+        .story-nav {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid #d4667e;
+            border-radius: 25px;
+            background: transparent;
+            color: #d4667e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #ffb3b8 0%, #ffb8c1 100%);
+            border: none;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(212, 102, 126, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 102, 126, 0.3);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ========== PROPOSAL SCREEN ========== */
+        #proposalScreen {
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe0d6 100%);
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        .proposal-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 60px 50px;
+            max-width: 650px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(212, 102, 126, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .proposal-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: #d4667e;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .proposal-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .yes-btn {
+            padding: 14px 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #ffb3b8 0%, #ffb8c1 100%);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(212, 102, 126, 0.3);
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(212, 102, 126, 0.5);
+        }
+
+        .yes-btn:active {
+            transform: scale(0.98);
+        }
+
+        .no-btn {
+            padding: 14px 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: 2px solid #d4667e;
+            border-radius: 25px;
+            background: transparent;
+            color: #d4667e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .no-btn:hover {
+            background: rgba(212, 102, 126, 0.1);
+        }
+
+        .no-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ========== CELEBRATION & RESULT SCREENS ========== */
+        .celebration-container {
+            text-align: center;
+        }
+
+        .celebration-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: #d4667e;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            color: #4a4a4a;
+            font-weight: 500;
+            line-height: 1.8;
+        }
+
+        /* ========== PARTICLES & DECORATIONS ========== */
+        .particles-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffb3b8;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatParticle 3s ease-in forwards;
+        }
+
+        .animated-particle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .particle-float {
+            animation: particleFloat 4s ease-in forwards;
+        }
+
+        .particle-swirl {
+            animation: particleSwirl 5s ease-in forwards;
+        }
+
+        .particle-bounce {
+            animation: particleBounce 4s ease-out forwards;
+        }
+
+        .particle-shimmer {
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        .particle-small {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 182, 193, 0.8);
+            box-shadow: 0 0 10px rgba(255, 182, 193, 0.6);
+        }
+
+        .particle-medium {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 105, 180, 0.6);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+        }
+
+        .particle-large {
+            width: 14px;
+            height: 14px;
+            background: rgba(255, 192, 203, 0.5);
+            box-shadow: 0 0 20px rgba(255, 192, 203, 0.4);
+        }
+
+        /* ========== MOBILE RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .greeting-text {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .number-input {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .story-card {
+                padding: 40px 25px;
+                margin: 20px;
+            }
+
+            .story-text {
+                font-size: 1.4rem;
+            }
+
+            .story-text .script-word {
+                font-size: 1.8rem;
+            }
+
+            .proposal-card {
+                padding: 40px 25px;
+                margin: 20px;
+            }
+
+            .proposal-text {
+                font-size: 2.5rem;
+            }
+
+            .yes-btn, .no-btn {
+                padding: 12px 35px;
+                font-size: 1rem;
+            }
+
+            .story-nav {
+                bottom: 30px;
+                gap: 10px;
+            }
+
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .greeting-text {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+                margin-bottom: 30px;
+            }
+
+            .story-text {
+                font-size: 1.2rem;
+            }
+
+            .story-text .script-word {
+                font-size: 1.5rem;
+            }
+
+            .proposal-text {
+                font-size: 2rem;
+            }
+
+            .proposal-buttons {
+                gap: 10px;
+            }
+
+            .yes-btn, .no-btn {
+                padding: 10px 25px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LANDING SCREEN -->
+    <div id="landingScreen" class="screen active">
+        <div class="particles-container" id="landingParticles"></div>
+        <div class="landing-content">
+            <div class="greeting-text">Hello my baby 💕</div>
+            <div class="subtitle">Before we start, enter the most important number in your life.</div>
+            <div class="input-container">
+                <input type="number" class="number-input" id="numberInput" placeholder="">
+                <div class="error-message" id="errorMessage"></div>
+                <button class="submit-btn" id="submitBtn">Let's Begin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STORY SCREEN -->
+    <div id="storyScreen" class="screen">
+        <div class="story-card">
+            <div class="story-text" id="storyContent"></div>
+        </div>
+        <div class="story-nav">
+            <button class="nav-btn" id="prevBtn">← Back</button>
+            <button class="nav-btn next" id="nextBtn">Next →</button>
+        </div>
+    </div>
+
+    <!-- PROPOSAL SCREEN -->
+    <div id="proposalScreen" class="screen">
+        <div class="particles-container" id="proposalParticles"></div>
+        <div class="proposal-card">
+            <div class="proposal-text" id="proposalContent">Nisa, will you be mine?</div>
+            <div class="proposal-buttons" id="proposalButtons">
+                <button class="yes-btn" id="yesBtn">Yes</button>
+                <button class="no-btn" id="noBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="resultScreen" class="screen">
+        <div class="particles-container" id="celebrationParticles"></div>
+        <div class="celebration-container">
+            <div class="celebration-text">Yes!!! 🎉</div>
+            <div class="result-message">Thank you, Nisa.<br>From today forward, it's you and me.</div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // ========== STATE & CONSTANTS ==========
+        const CORRECT_NUMBER = 161104;
+        const STORY_SLIDES = [
+            "Do you remember <span class='script-word'>19 June 2025</span>? Because I do.",
+            "That was the day <span class='script-word'>everything</span> quietly changed for me.",
+            "Since then, you've been on my mind <span class='script-word'>more</span> than you know.",
+            "You made my days <span class='script-word'>softer, warmer, easier</span> my baby.",
+            "I will <span class='script-word'>forever</span> love you my <span class='script-word'>love</span>"
+        ];
+
+        let currentStorySlide = 0;
+        let noClickCount = 0;
+
+        // ========== DOM ELEMENTS ==========
+        const landingScreen = document.getElementById('landingScreen');
+        const storyScreen = document.getElementById('storyScreen');
+        const proposalScreen = document.getElementById('proposalScreen');
+        const resultScreen = document.getElementById('resultScreen');
+
+        const numberInput = document.getElementById('numberInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        const storyContent = document.getElementById('storyContent');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        const proposalContent = document.getElementById('proposalContent');
+        const proposalButtons = document.getElementById('proposalButtons');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+
+        // ========== LANDING SCREEN LOGIC ==========
+        function initLandingParticles() {
+            const container = document.getElementById('landingParticles');
+            
+            // Static sparkles (background)
+            for (let i = 0; i < 15; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 3 + 's';
+                sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
+                container.appendChild(sparkle);
+            }
+            
+            // Animated particles - floating
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'animated-particle particle-float';
+                    
+                    const sizes = ['particle-small', 'particle-medium'];
+                    particle.classList.add(sizes[Math.floor(Math.random() * sizes.length)]);
+                    
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.bottom = '-20px';
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 6000);
+                }, i * 300);
+            }
+            
+            // Animated particles - swirl
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'animated-particle particle-swirl particle-shimmer';
+                    particle.classList.add('particle-medium');
+                    
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 50 + 50 + '%';
+                    particle.style.animationDelay = Math.random() * 1 + 's';
+                    particle.style.animationDuration = (4 + Math.random() * 2) + 's';
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 7000);
+                }, i * 400);
+            }
+            
+            // Animated particles - bounce
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'animated-particle particle-bounce';
+                    particle.classList.add('particle-large');
+                    
+                    particle.style.left = (10 + Math.random() * 80) + '%';
+                    particle.style.bottom = '-30px';
+                    particle.style.animationDelay = Math.random() * 1.5 + 's';
+                    particle.style.animationDuration = (4 + Math.random() * 1) + 's';
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 6000);
+                }, i * 500);
+            }
+            
+            // Continuous particle generation
+            setInterval(() => {
+                if (document.getElementById('landingScreen').classList.contains('active')) {
+                    const particle = document.createElement('div');
+                    particle.className = 'animated-particle particle-float';
+                    particle.classList.add('particle-small');
+                    
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.bottom = '-20px';
+                    particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 6000);
+                }
+            }, 800);
+        }
+
+        submitBtn.addEventListener('click', handleNumberSubmit);
+        numberInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleNumberSubmit();
+            }
+        });
+
+        function handleNumberSubmit() {
+            const value = parseInt(numberInput.value);
+            
+            if (value === CORRECT_NUMBER) {
+                errorMessage.textContent = '';
+                transitionToStory();
+            } else {
+                errorMessage.textContent = "nope, that's not the one :)";
+                numberInput.classList.add('shake');
+                setTimeout(() => {
+                    numberInput.classList.remove('shake');
+                }, 500);
+                numberInput.value = '';
+            }
+        }
+
+        // ========== SCREEN TRANSITIONS ==========
+        function showScreen(screenElement) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            screenElement.classList.add('active');
+        }
+
+        function transitionToStory() {
+            currentStorySlide = 0;
+            updateStoryContent();
+            showScreen(storyScreen);
+        }
+
+        function updateStoryContent() {
+            storyContent.innerHTML = STORY_SLIDES[currentStorySlide];
+            
+            prevBtn.disabled = currentStorySlide === 0;
+            nextBtn.textContent = currentStorySlide === STORY_SLIDES.length - 1 ? "The Question →" : "Next →";
+            
+            if (currentStorySlide === STORY_SLIDES.length - 1) {
+                nextBtn.style.background = 'linear-gradient(135deg, #ffb3b8 0%, #ffb8c1 100%)';
+                nextBtn.style.color = '#fff';
+            } else {
+                nextBtn.style.background = '';
+                nextBtn.style.color = '';
+            }
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStorySlide > 0) {
+                currentStorySlide--;
+                updateStoryContent();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStorySlide < STORY_SLIDES.length - 1) {
+                currentStorySlide++;
+                updateStoryContent();
+            } else {
+                transitionToProposal();
+            }
+        });
+
+        function transitionToProposal() {
+            noClickCount = 0;
+            proposalButtons.innerHTML = '<button class="yes-btn" id="yesBtn">Yes</button><button class="no-btn" id="noBtn">No</button>';
+            attachProposalListeners();
+            showScreen(proposalScreen);
+            initProposalParticles();
+        }
+
+        // ========== PROPOSAL LOGIC ==========
+        function attachProposalListeners() {
+            const newYesBtn = document.getElementById('yesBtn');
+            const newNoBtn = document.getElementById('noBtn');
+
+            newYesBtn.addEventListener('click', handleYes);
+            newNoBtn.addEventListener('click', handleNo);
+        }
+
+        function handleYes() {
+            triggerCelebration();
+            showScreen(resultScreen);
+        }
+
+        function handleNo() {
+            noClickCount++;
+
+            if (noClickCount === 1) {
+                const proposalContent = document.getElementById('proposalContent');
+                proposalContent.textContent = "Are you sure?";
+            } else if (noClickCount > 1) {
+                const noBtn = document.getElementById('noBtn');
+                if (noBtn) {
+                    const currentScale = 1 - (noClickCount - 1) * 0.2;
+                    noBtn.style.transform = `scale(${Math.max(currentScale, 0)})`;
+                    
+                    if (noClickCount >= 5) {
+                        noBtn.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        // ========== CELEBRATION & PARTICLES ==========
+        function triggerCelebration() {
+            const container = document.getElementById('celebrationParticles');
+            
+            // Create falling hearts
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = '❤';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.top = '-20px';
+                    
+                    const tx = (Math.random() - 0.5) * 100;
+                    const ty = window.innerHeight + 50;
+                    heart.style.setProperty('--tx', tx + 'px');
+                    heart.style.setProperty('--ty', ty + 'px');
+                    
+                    container.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 3000);
+                }, i * 100);
+            }
+
+            // Create sparkling particles
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'heart';
+                particle.textContent = '✨';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 50 + '%';
+                
+                const tx = (Math.random() - 0.5) * 200;
+                const ty = (Math.random() - 0.5) * 200;
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animationDuration = (2 + Math.random() * 1) + 's';
+                
+                container.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 3000);
+            }
+        }
+
+        function initProposalParticles() {
+            const container = document.getElementById('proposalParticles');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 15; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 3 + 's';
+                sparkle.style.animationDuration = (3 + Math.random() * 2) + 's';
+                container.appendChild(sparkle);
+            }
+        }
+
+        // ========== INITIALIZATION ==========
+        window.addEventListener('load', () => {
+            initLandingParticles();
+        });
+    </script>
+</body>
+</html>
